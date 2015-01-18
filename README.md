@@ -9,12 +9,16 @@ Screenshots
 How to setup
 --------------
 - 1: Create picker
-    picker = [[DayDatePickerView alloc]initWithFrame:frame];
+
+	`picker = [[DayDatePickerView alloc]initWithFrame:frame];`
 - 2: Set delegate and data source (optional)
-    picker.delegate assd
+
+	`picker.delegate = self;`
+	`picker.dataSource = self`
+
 - 4: Set date and minimum date (optional)
-    picker.date = [NSDate date];
-    picker.minimumDate = [NSDate date];
+	`picker.date = [NSDate date];`
+	`picker.minimumDate = [NSDate date];`
 
 Delegate and Data Source
 --------------
