@@ -9,10 +9,8 @@ Screenshots
 How to setup
 --------------
 - 1: Create picker
-
 	`picker = [[DayDatePickerView alloc]initWithFrame:frame];`
 - 2: Set delegate and data source (optional)
-
 	`picker.delegate = self;`
 	`picker.dataSource = self`
 
