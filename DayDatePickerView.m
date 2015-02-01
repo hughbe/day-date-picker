@@ -155,7 +155,7 @@
         [self setDate:self.minimumDate updateComponents:YES];
     }
     else {
-        [self setDate:date updateComponents:NO];
+        [self setDate:date updateComponents:YES];
     }
 }
 
