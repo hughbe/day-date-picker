@@ -20,6 +20,7 @@ typedef NS_ENUM(NSInteger, DayDatePickerViewColumnType) {
 @interface DayDatePickerView : UIView <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
 
 - (void)reload;
+- (void)setup;
 
 @property (weak, nonatomic) id<DayDatePickerViewDelegate> delegate;
 @property (weak, nonatomic) id<DayDatePickerViewDataSource> dataSource;
