@@ -220,6 +220,7 @@
         columType = DayDatePickerViewColumnTypeDay;
     }
     else if(tableView == self.monthsTableView) {
+        dateComponents.day = 1;
         dateComponents.month = indexPath.row + 1;
         NSDate *date = [self.calendar dateFromComponents:dateComponents];
         cell.textLabel.text = [self.monthDateFormatter stringFromDate:date];
