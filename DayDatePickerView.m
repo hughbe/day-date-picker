@@ -167,7 +167,7 @@
         [self selectRow:self.components.month - 1 inTableView:self.monthsTableView animated:YES updateComponents:NO];
         [self reload];
     }
-    else if([self.delegate respondsToSelector:@selector(dayDatePickerView:didSelectDate:)]) {
+    if([self.delegate respondsToSelector:@selector(dayDatePickerView:didSelectDate:)]) {
         [self.delegate dayDatePickerView:self didSelectDate:date];
     }
 }
@@ -231,7 +231,7 @@
         columType = DayDatePickerViewColumnTypeDay;
     }
     else if(tableView == self.yearsTableView) {
-        dateComponents.year += indexPath.row;
+        dateComponents.year = minimumDateComponents.year + indexPath.row;
         NSDate *date = [self.calendar dateFromComponents:dateComponents];
         cell.textLabel.text = [self.yearDateFormatter stringFromDate:date];
         
@@ -289,9 +289,8 @@
         }
         else if(tableView == self.yearsTableView) {
             self.components.year = [self.calendar component:NSCalendarUnitYear fromDate:self.minimumDate];
-            if(row == 1) {
-                self.components.year++;
-            }
+            NSDateComponents *minimumDateComponents = [self.calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:self.minimumDate];
+            self.components.year = minimumDateComponents.year + row;
         }
         
         self.date = [self.calendar dateFromComponents:self.components];
