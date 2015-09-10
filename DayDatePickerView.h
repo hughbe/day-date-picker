@@ -5,6 +5,8 @@
 //  Created by Hugh Bellamy on 17/01/2015.
 //  Copyright (c) 2015 Hugh Bellamy. All rights reserved.
 //
+//  Modified by Robert Miller on 10/09/2015
+//  Copyright (c) 2015 Robert Miller. All rights reserved.
 
 #import <UIKit/UIKit.h>
 
