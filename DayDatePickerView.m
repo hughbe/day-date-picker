@@ -72,7 +72,7 @@
         frame.size.width = self.frame.size.width * [self.delegate dayDatePickerView:self sizeFractionForColumnType:DayDatePickerViewColumnTypeDay];
     }
     else {
-        frame.size.width = self.frame.size.width / 2.3;
+        frame.size.width = self.frame.size.width / 2.8;
     }
     
     self.daysTableView = [self dayDatePickerTableViewWithFrame:frame type:DayDatePickerViewColumnTypeDay];
@@ -83,7 +83,7 @@
         frame.size.width = self.frame.size.width * [self.delegate dayDatePickerView:self sizeFractionForColumnType:DayDatePickerViewColumnTypeMonth];
     }
     else {
-        frame.size.width = self.frame.size.width / 3.5;
+        frame.size.width = self.frame.size.width / 2.5;
     }
     self.monthsTableView = [self dayDatePickerTableViewWithFrame:frame type:DayDatePickerViewColumnTypeMonth];
     [self addSubview:self.monthsTableView];
@@ -125,10 +125,20 @@
     selectionViewFrame.size.height = self.rowHeight;
     self.overlayView.frame = selectionViewFrame;
     
+//    [self.daysTableView setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
+//    [self.monthsTableView setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
+//    [self.yearsTableView setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
+    
     [self addSubview:self.overlayView];
     
     _calendar = [NSCalendar currentCalendar];
     self.minimumDate = [NSDate date];
+    NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    NSDateComponents *offsetComponents = [[NSDateComponents alloc] init];
+    offsetComponents.day  = 0;
+    offsetComponents.month  = 0;
+    offsetComponents.year  = 2;
+    self.maximumDate = [calendar dateByAddingComponents:offsetComponents toDate:[NSDate date]options:0];
     [self setDate:[NSDate date] updateComponents:YES];
 }
 
@@ -154,6 +164,9 @@
     if([date compare:self.minimumDate] == NSOrderedAscending) {
         [self setDate:self.minimumDate updateComponents:YES];
     }
+    else if ([date compare:self.maximumDate] == NSOrderedDescending) {
+        [self setDate:self.maximumDate updateComponents:YES];
+    }
     else {
         [self setDate:date updateComponents:YES];
     }
@@ -165,6 +178,8 @@
         self.components = [self.calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:self.date];
         [self selectRow:self.components.day - 1 inTableView:self.daysTableView animated:YES updateComponents:NO];
         [self selectRow:self.components.month - 1 inTableView:self.monthsTableView animated:YES updateComponents:NO];
+        NSDateComponents *minimumDateComponents = [self.calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:self.minimumDate];
+        [self selectRow:self.components.year - minimumDateComponents.year inTableView:self.yearsTableView animated:YES updateComponents:NO];
         [self reload];
     }
     if([self.delegate respondsToSelector:@selector(dayDatePickerView:didSelectDate:)]) {
@@ -189,7 +204,14 @@
             numberOfRows = [self.dataSource numberOfYearsInDayDatePickerView:self];
         }
         else {
-            numberOfRows = 2;
+            NSDateComponents *minimumDateComponents = [self.calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:self.minimumDate];
+            //NSDateComponents *todaysDateComponents = [self.calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:[NSDate date]];
+            NSDateComponents *maximumDateComponents = [self.calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:self.maximumDate];
+            numberOfRows = (maximumDateComponents.year - minimumDateComponents.year) + 1;
+            if (numberOfRows < 1) {
+                numberOfRows = 1;
+            }
+            //numberOfRows = 2;
         }
     }
     return numberOfRows;
@@ -207,6 +229,8 @@
     BOOL disabled = NO;
     
     NSDateComponents *minimumDateComponents = [self.calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:self.minimumDate];
+    NSDateComponents *maximumDateComponents = [self.calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:self.maximumDate];
+
     NSDateComponents *dateComponents = [self.components copy];
     
     if(tableView == self.daysTableView) {
@@ -214,7 +238,7 @@
         NSDate *date = [self.calendar dateFromComponents:dateComponents];
         cell.textLabel.text = [[self.dayDateFormatter stringFromDate:date] stringByAppendingString:[self daySuffixForDate:date]];
         
-        if(dateComponents.day < minimumDateComponents.day && dateComponents.month <= minimumDateComponents.month && dateComponents.year <= minimumDateComponents.year) {
+        if((dateComponents.day < minimumDateComponents.day && dateComponents.month <= minimumDateComponents.month && dateComponents.year <= minimumDateComponents.year) || (dateComponents.day > maximumDateComponents.day && dateComponents.month >= maximumDateComponents.month && dateComponents.year >= maximumDateComponents.year)) {
             disabled = YES;
         }
         columType = DayDatePickerViewColumnTypeDay;
@@ -225,7 +249,7 @@
         NSDate *date = [self.calendar dateFromComponents:dateComponents];
         cell.textLabel.text = [self.monthDateFormatter stringFromDate:date];
         
-        if(dateComponents.month < minimumDateComponents.month && dateComponents.year <= minimumDateComponents.year) {
+        if((dateComponents.month < minimumDateComponents.month && dateComponents.year <= minimumDateComponents.year) || (dateComponents.month > maximumDateComponents.month && dateComponents.year >= maximumDateComponents.year)) {
             disabled = YES;
         }
         columType = DayDatePickerViewColumnTypeDay;
@@ -320,7 +344,7 @@
 - (NSDateFormatter *)monthDateFormatter {
     if(!_monthDateFormatter) {
         _monthDateFormatter = [[NSDateFormatter alloc]init];
-        _monthDateFormatter.dateFormat = @"MMM";
+        _monthDateFormatter.dateFormat = @"MMMM";
     }
     return _monthDateFormatter;
 }

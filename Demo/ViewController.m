@@ -19,8 +19,22 @@
     self.picker.delegate = self; //1: SET DELEGATE (optional)
     self.picker.dataSource = self; //2: SET DATA SOURCE (optional)
     [self.picker setup]; //3: CALL - [DayDatePickerView setup] (NOT optional)
-    self.picker.date = [NSDate date]; //4: SET DATE (optional)
-    self.picker.minimumDate = [NSDate date]; //5: SET MINIMUM DATE (optional)
+    NSDate *today = [NSDate date];
+    NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    NSDateComponents *offsetComponents = [[NSDateComponents alloc] init];
+    offsetComponents.day  = 0;
+    offsetComponents.month  = 0;
+    offsetComponents.year  = -2;
+    self.picker.minimumDate = [calendar dateByAddingComponents:offsetComponents toDate:today options:0]; //4: SET MINIMUM DATE (optional)
+    //For Maximum Date
+    offsetComponents.day  = 0;
+    offsetComponents.month  = 0;
+    offsetComponents.year  = 1;
+    self.picker.maximumDate = [calendar dateByAddingComponents:offsetComponents toDate:today options:0]; //5: SET MINIMUM DATE (optional)
+    //sets current date on picker
+    //[self.picker setDate:[NSDate date] updateComponents:YES];
+    self.picker.date = today; //6: SET DATE (NOT optional)
+    
 }
 
 - (UIFont *)dayDatePickerView:(DayDatePickerView *)dayDatePickerView fontForRow:(NSInteger)row inColumn:(DayDatePickerViewColumnType)columnType disabled:(BOOL)disabled {

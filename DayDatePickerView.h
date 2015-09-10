@@ -21,11 +21,13 @@ typedef NS_ENUM(NSInteger, DayDatePickerViewColumnType) {
 
 - (void)reload;
 - (void)setup;
+- (void)setDate:(NSDate *)date updateComponents:(BOOL)updateComponents;
 
 @property (weak, nonatomic) id<DayDatePickerViewDelegate> delegate;
 @property (weak, nonatomic) id<DayDatePickerViewDataSource> dataSource;
 
 @property (strong, nonatomic) NSDate *minimumDate;
+@property (strong, nonatomic) NSDate *maximumDate;
 @property (strong, nonatomic) NSDate *date;
 
 @property (strong, nonatomic) NSDateFormatter *dayDateFormatter;
