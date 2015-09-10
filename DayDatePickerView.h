@@ -21,7 +21,6 @@ typedef NS_ENUM(NSInteger, DayDatePickerViewColumnType) {
 
 - (void)reload;
 - (void)setup;
-- (void)setDate:(NSDate *)date updateComponents:(BOOL)updateComponents;
 
 @property (weak, nonatomic) id<DayDatePickerViewDelegate> delegate;
 @property (weak, nonatomic) id<DayDatePickerViewDataSource> dataSource;

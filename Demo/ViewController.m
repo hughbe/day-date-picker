@@ -31,8 +31,6 @@
     offsetComponents.month  = 0;
     offsetComponents.year  = 1;
     self.picker.maximumDate = [calendar dateByAddingComponents:offsetComponents toDate:today options:0]; //5: SET MINIMUM DATE (optional)
-    //sets current date on picker
-    //[self.picker setDate:[NSDate date] updateComponents:YES];
     self.picker.date = today; //6: SET DATE (NOT optional)
     
 }
