@@ -26,8 +26,8 @@
 		1E9EAF851A6BE01A000C1AE7 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "Supporting Files/Default-568h@2x.png"; sourceTree = SOURCE_ROOT; };
 		1E9EAF871A6BE0CF000C1AE7 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = SOURCE_ROOT; };
 		1E9EAF881A6BE0CF000C1AE7 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = SOURCE_ROOT; };
-		1E9EAF8A1A6BE111000C1AE7 /* DayDatePickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DayDatePickerView.h; path = ../DayDatePickerView.h; sourceTree = SOURCE_ROOT; };
-		1E9EAF8B1A6BE111000C1AE7 /* DayDatePickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DayDatePickerView.m; path = ../DayDatePickerView.m; sourceTree = SOURCE_ROOT; };
+		1E9EAF8A1A6BE111000C1AE7 /* DayDatePickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DayDatePickerView.h; path = ../src/DayDatePickerView.h; sourceTree = SOURCE_ROOT; };
+		1E9EAF8B1A6BE111000C1AE7 /* DayDatePickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DayDatePickerView.m; path = ../src/DayDatePickerView.m; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
