@@ -3,8 +3,8 @@ A custom and customizable UIDatePicker which displays the day of the week alongs
 
 Screenshots
 --------------
-![alt text](https://github.com/hughbe/DayDatePicker/blob/master/resources/1.png "Screenshot 1")
-![alt text](https://github.com/hughbe/DayDatePicker/blob/master/resources/2.png "Screenshot 2")
+![alt text](https://github.com/hughbe/DayDatePicker/blob/master/resources/screenshots/1.png "Screenshot 1")
+![alt text](https://github.com/hughbe/DayDatePicker/blob/master/resources/screenshots/2.png "Screenshot 2")
 
 Setup
 --------------
