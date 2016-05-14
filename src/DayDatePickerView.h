@@ -10,6 +10,8 @@
 
 #import <UIKit/UIKit.h>
 
+const static CGFloat pickerHeight = 250.f;
+
 @protocol DayDatePickerViewDelegate;
 @protocol DayDatePickerViewDataSource;
 
@@ -40,6 +42,13 @@ typedef NS_ENUM(NSInteger, DayDatePickerViewColumnType) {
 @property (strong, nonatomic) UITableView *daysTableView;
 @property (strong, nonatomic) UITableView *monthsTableView;
 @property (strong, nonatomic) UITableView *yearsTableView;
+
+@property (assign, nonatomic, readonly) BOOL showing;
+@property (assign, nonatomic) CGRect toFrame;
+@property (assign, nonatomic) CGRect originalFrame;
+
+- (void)showInView:(UIView*)inView;
+- (void)dismiss;
 
 @end
 

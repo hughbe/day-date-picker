@@ -21,6 +21,9 @@
 @property (assign, nonatomic) NSInteger rowHeight;
 @property (assign, nonatomic) NSInteger centralRowOffset;
 
+//To keep the frame of transitions
+@property (nonatomic, strong) UIView *maskView;
+
 @end
 
 @implementation DayDatePickerView
@@ -54,6 +57,50 @@
 
 - (void)awakeFromNib {
     [self setup];
+}
+
+//MARK: - Accessors
+- (UIView*)maskView
+{
+    if (!_maskView)
+    {
+        _maskView = [[UIView alloc] initWithFrame:self.bounds];
+        _maskView.backgroundColor = [UIColor clearColor];
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
+        [_maskView addGestureRecognizer:tap];
+    }
+    return _maskView;
+}
+
+- (void)handleTapGesture:(UITapGestureRecognizer*)recognizer
+{
+    [self dismiss];
+}
+
+//MARK: - Show / dismiss
+- (void)showInView:(UIView*)inView
+{
+    self.maskView.frame = inView.frame;
+    [inView addSubview:self.maskView];
+    [inView addSubview:self];
+    [UIView animateWithDuration:0.3 animations:^{
+        self.alpha = 1;
+        self.frame = self.toFrame;
+    } completion:^(BOOL finished) {
+        _showing = YES;
+    }];
+}
+
+- (void)dismiss
+{
+    [UIView animateWithDuration:0.3 animations:^{
+        self.alpha = 0;
+        self.frame = self.originalFrame;
+    } completion:^(BOOL finished) {
+        [self.maskView removeFromSuperview];
+        [self removeFromSuperview];
+        _showing = NO;
+    }];
 }
 
 - (void)setup {

@@ -11,6 +11,7 @@
 
 @interface ViewController : UIViewController <DayDatePickerViewDataSource, DayDatePickerViewDelegate>
 
+@property (weak, nonatomic) IBOutlet UIView *topView;
 @property (weak, nonatomic) IBOutlet DayDatePickerView *picker;
 @property (weak, nonatomic) IBOutlet UILabel *datePreviewLabel;
 
