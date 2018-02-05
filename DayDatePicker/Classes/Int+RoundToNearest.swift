@@ -11,7 +11,7 @@ internal extension Int {
         let roundedNum = Int(floor(fractionNum))
         return roundedNum * toNearest
     }
-    
+
     var ordinalIndicatorString: String {
         get {
             switch self {

@@ -15,14 +15,14 @@ public extension TimePickerView {
             } else if lhs.hour == rhs.hour && lhs.minute < rhs.minute {
                 return true
             }
-            
+
             return false
         }
-        
+
         public static func ==(lhs: TimePickerView.Time, rhs: TimePickerView.Time) -> Bool {
             return lhs.hour == rhs.hour && lhs.minute == rhs.minute
         }
-        
+
         public var hour: Int {
             willSet {
                 if let hoursInADay = Calendar.current.range(of: .hour, in: .day, for: Date()) {
@@ -30,7 +30,7 @@ public extension TimePickerView {
                 }
             }
         }
-        
+
         public var minute: Int {
             willSet {
                 if let minutesInAnHour = Calendar.current.range(of: .minute, in: .hour, for: Date()) {

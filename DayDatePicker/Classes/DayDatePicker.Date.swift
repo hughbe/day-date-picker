@@ -17,25 +17,25 @@ extension DayDatePickerView {
                     return true
                 }
             }
-            
+
             return false
         }
-        
+
         public static func ==(lhs: DayDatePickerView.Date, rhs: DayDatePickerView.Date) -> Bool {
             return lhs.year == rhs.year && lhs.month == rhs.month && lhs.day == rhs.day
         }
-        
+
         public var date: Foundation.Date {
             get {
                 var components = DateComponents()
                 components.year = year
                 components.month = month
                 components.day = day
-                
+
                 return Calendar.current.date(from: components)!
             }
         }
-        
+
         public var year: Int {
             willSet {
                 if let yearsInEra = Calendar.current.range(of: .year, in: .era, for: date) {
@@ -43,7 +43,7 @@ extension DayDatePickerView {
                 }
             }
         }
-        
+
         public var month: Int {
             willSet {
                 if let monthsInYear = Calendar.current.range(of: .month, in: .year, for: date) {
@@ -51,7 +51,7 @@ extension DayDatePickerView {
                 }
             }
         }
-        
+
         public var day: Int {
             willSet {
                 if let daysInMonth = Calendar.current.range(of: .day, in: .month, for: date) {
