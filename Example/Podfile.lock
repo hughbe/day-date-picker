@@ -1,0 +1,23 @@
+PODS:
+  - DayDatePicker (0.1.0)
+  - FBSnapshotTestCase (2.1.4):
+    - FBSnapshotTestCase/SwiftSupport (= 2.1.4)
+  - FBSnapshotTestCase/Core (2.1.4)
+  - FBSnapshotTestCase/SwiftSupport (2.1.4):
+    - FBSnapshotTestCase/Core
+
+DEPENDENCIES:
+  - DayDatePicker (from `../`)
+  - FBSnapshotTestCase (~> 2.1.4)
+
+EXTERNAL SOURCES:
+  DayDatePicker:
+    :path: ../
+
+SPEC CHECKSUMS:
+  DayDatePicker: 1e930a2bd6a083c2298e93582d71479aecc48dad
+  FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
+
+PODFILE CHECKSUM: 69fcf032d21f0c566bbf962e2e8c2116500e1eda
+
+COCOAPODS: 1.4.0
