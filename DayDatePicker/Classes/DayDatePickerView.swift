@@ -18,8 +18,8 @@ public class DayDatePickerView : UIControl {
         super.init(coder: aDecoder)
     }
 
-    private var _date: Date!
-    private var _minDate: Date?
+    fileprivate var _date: Date!
+    fileprivate var _minDate: Date?
     
     public var minDate: Date? {
         get {
@@ -90,9 +90,9 @@ public class DayDatePickerView : UIControl {
         }
     }
     
-    private let dayTableView = UITableView()
-    private let monthTableView = UITableView()
-    private let yearTableView = UITableView()
+    fileprivate let dayTableView = UITableView()
+    fileprivate let monthTableView = UITableView()
+    fileprivate let yearTableView = UITableView()
     public let overlayView = UIView()
     
     public var dayFormatter = DateFormatter(format: "EEE d") {
@@ -113,12 +113,12 @@ public class DayDatePickerView : UIControl {
         }
     }
 
-    private var rowHeight: CGFloat = 44
+    fileprivate var rowHeight: CGFloat = 44
     @IBOutlet public var delegate: DayDatePickerViewDelegate?
 
-    private var yearRange: Range<Int>!
-    private var monthRange: Range<Int>!
-    private var dayRange: Range<Int>!
+    fileprivate var yearRange: Range<Int>!
+    fileprivate var monthRange: Range<Int>!
+    fileprivate var dayRange: Range<Int>!
 }
 
 // Layout actions.
@@ -133,7 +133,7 @@ extension DayDatePickerView {
         setup()
     }
 
-    private func setup() {
+    fileprivate func setup() {
         if yearTableView.superview != nil {
             return
         }
