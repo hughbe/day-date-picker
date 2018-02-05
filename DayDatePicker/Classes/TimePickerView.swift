@@ -49,11 +49,10 @@ public class TimePickerView : UIControl {
         }
 
         time.minute = time.minute.round(toNearest: minuteInterval)
-
-        let reloadMinuteView = _time.hour != time.hour
+        let reloadMinuteTableView = time.hour != _time.hour
         _time = time
-
-        if reloadMinuteView {
+        
+        if reloadMinuteTableView {
             minuteTableView.reloadAndLayout()
         }
 
@@ -72,11 +71,10 @@ public class TimePickerView : UIControl {
 
     public func setMinTime(minTime: Time?, animated: Bool) {
         _minTime = minTime
-
         reload()
 
         if let minTime = minTime, time < minTime {
-            setTime(hour: minTime.hour, minute: minTime.minute, animated: true)
+            setTime(time: minTime, animated: animated)
         }
     }
 
@@ -87,7 +85,7 @@ public class TimePickerView : UIControl {
                 precondition(newValue >= secondsInMinute.lowerBound && secondsInMinute.upperBound % newValue == 0, "The time interval has to be a positive number. 60 must be divisible by the interval.")
             }
         } didSet {
-            minuteTableView.reloadAndLayout()
+            minuteTableView.reloadData()
         }
     }
 
@@ -143,15 +141,15 @@ extension TimePickerView {
             NSLayoutConstraint(item: overlayView, attribute: .trailing, relatedBy: .equal, toItem: self, attribute: .trailing, multiplier: 1, constant: 0),
             NSLayoutConstraint(item: overlayView, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 0),
             NSLayoutConstraint(item: overlayView, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: rowHeight)
-            ])
+        ])
 
         if _time == nil {
             let components = Calendar.current.dateComponents([.hour, .minute], from: Date()) as NSDateComponents
             _time = Time(hour: components.hour, minute: components.minute)
         }
 
-        hourTableView.reloadData()
-        minuteTableView.reloadData()
+        hourRange = Calendar.current.range(of: .hour, in: .day, for: Date())
+        minuteRange = Calendar.current.range(of: .minute, in: .hour, for: Date())
 
         superview?.layoutIfNeeded()
         setTime(time: _time, animated: false)
@@ -160,6 +158,7 @@ extension TimePickerView {
     private func setupTableView(tableView: UITableView) {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.rowHeight = rowHeight
+        tableView.estimatedRowHeight = rowHeight
         tableView.showsVerticalScrollIndicator = false
         tableView.separatorStyle = .none
         tableView.backgroundColor = UIColor.white
@@ -226,6 +225,14 @@ extension TimePickerView : UITableViewDataSource, UITableViewDelegate {
 
         return cell;
     }
+    
+    public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return rowHeight
+    }
+    
+    public func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return rowHeight
+    }
 
     public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         guard let tableView = scrollView as? UITableView else {
@@ -249,7 +256,7 @@ extension TimePickerView : UITableViewDataSource, UITableViewDelegate {
         let row = tableView.getRowScroll()
 
         if tableView == hourTableView {
-            hour = hourRange.upperBound + row
+            hour = hourRange.lowerBound + row
         } else if tableView == minuteTableView {
             minute = minuteRange.lowerBound + row * minuteInterval
         }
@@ -298,4 +305,3 @@ extension TimePickerView {
         }
     }
 }
-

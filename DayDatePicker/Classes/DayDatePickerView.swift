@@ -54,15 +54,14 @@ public class DayDatePickerView : UIControl {
             date = minTime
         }
 
-        let reloadMonthView = _date.year != date.year
-        let reloadDayView = reloadMonthView || _date.month != date.month
-
+        let reloadMonthTableView = date.year != _date.year
+        let reloadDayTableView = reloadMonthTableView || date.month != _date.month
         _date = date
-
-        if reloadMonthView {
+        
+        if reloadMonthTableView {
             monthTableView.reloadAndLayout()
         }
-        if reloadDayView {
+        if reloadDayTableView {
             dayTableView.reloadAndLayout()
         }
 
@@ -82,11 +81,10 @@ public class DayDatePickerView : UIControl {
 
     public func setMinDate(minDate: Date?, animated: Bool) {
         _minDate = minDate
-
         reload()
 
         if let minDate = minDate, date < minDate {
-            setDate(year: minDate.year, month: minDate.month, day: minDate.day, animated: true)
+            setDate(date: minDate, animated: true)
         }
     }
 
@@ -175,9 +173,9 @@ extension DayDatePickerView {
             _date = Date(year: components.year, month: components.month, day: components.day)
         }
 
-        yearTableView.reloadData()
-        monthTableView.reloadData()
-        dayTableView.reloadData()
+        dayRange = Calendar.current.range(of: .day, in: .month, for: _date.date)
+        monthRange = Calendar.current.range(of: .month, in: .year, for: _date.date)
+        yearRange = Calendar.current.range(of: .year, in: .era, for: _date.date)
 
         superview?.layoutIfNeeded()
         setDate(date: _date, animated: false)
@@ -367,4 +365,3 @@ extension DayDatePickerView {
         }
     }
 }
-

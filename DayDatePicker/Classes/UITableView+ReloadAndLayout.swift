@@ -10,6 +10,7 @@ import UIKit
 internal extension UITableView {
     func reloadAndLayout() {
         reloadData()
+        setNeedsLayout()
         layoutIfNeeded()
     }
 
