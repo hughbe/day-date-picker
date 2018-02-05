@@ -18,8 +18,8 @@ public class TimePickerView : UIControl {
         super.init(coder: aDecoder)
     }
 
-    private var _time: Time!
-    private var _minTime: Time?
+    fileprivate var _time: Time!
+    fileprivate var _minTime: Time?
     
     public var minTime: Time? {
         get {
@@ -91,15 +91,15 @@ public class TimePickerView : UIControl {
         }
     }
     
-    private let hourTableView = UITableView()
-    private let minuteTableView = UITableView()
+    fileprivate let hourTableView = UITableView()
+    fileprivate let minuteTableView = UITableView()
     public let overlayView = UIView()
 
-    private var rowHeight: CGFloat = 44
+    fileprivate var rowHeight: CGFloat = 44
     @IBOutlet public var delegate: TimePickerViewDelegate?
     
-    private var hourRange: Range<Int>!
-    private var minuteRange: Range<Int>!
+    fileprivate var hourRange: Range<Int>!
+    fileprivate var minuteRange: Range<Int>!
 }
 
 // Layout actions.
@@ -114,7 +114,7 @@ extension TimePickerView {
         setup()
     }
     
-    private func setup() {
+    fileprivate func setup() {
         if hourTableView.superview != nil {
             return
         }
