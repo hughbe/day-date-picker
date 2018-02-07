@@ -166,6 +166,8 @@ extension TimePickerView {
 
         tableView.delegate = self
         tableView.dataSource = self
+        
+        tableView.scrollsToTop = false
 
         addSubview(tableView)
     }
@@ -245,6 +247,14 @@ extension TimePickerView : UITableViewDataSource, UITableViewDelegate {
     }
 
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        guard let tableView = scrollView as? UITableView else {
+            return
+        }
+
+        alignTableViewToRow(tableView: tableView)
+    }
+
+    public func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
         guard let tableView = scrollView as? UITableView else {
             return
         }
