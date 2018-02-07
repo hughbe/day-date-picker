@@ -9,18 +9,16 @@ import Foundation
 
 public extension TimePickerView {
     public struct Time: Comparable {
-        public static func <(lhs: TimePickerView.Time, rhs: TimePickerView.Time) -> Bool {
-            if lhs.hour < rhs.hour {
-                return true
-            } else if lhs.hour == rhs.hour && lhs.minute < rhs.minute {
-                return true
-            }
-
-            return false
+        public init(hour: Int, minute: Int) {
+            self.hour = hour
+            self.minute = minute
         }
-
-        public static func ==(lhs: TimePickerView.Time, rhs: TimePickerView.Time) -> Bool {
-            return lhs.hour == rhs.hour && lhs.minute == rhs.minute
+        
+        public init(date: Date) {
+            let components = Calendar.current.dateComponents([.hour, .minute], from: date)
+            
+            self.hour = components.hour ?? 0
+            self.minute = components.minute ?? 0
         }
 
         public var hour: Int {
@@ -37,6 +35,44 @@ public extension TimePickerView {
                     precondition(newValue >= minutesInAnHour.lowerBound && newValue < minutesInAnHour.upperBound)
                 }
             }
+        }
+        
+        public var date: Date? {
+            var components = DateComponents()
+            components.hour = hour
+            components.minute = minute
+            
+            return Calendar.current.date(from: components)
+        }
+        
+        public static func <(lhs: TimePickerView.Time, rhs: TimePickerView.Time) -> Bool {
+            if lhs.hour < rhs.hour {
+                return true
+            } else if lhs.hour == rhs.hour && lhs.minute < rhs.minute {
+                return true
+            }
+            
+            return false
+        }
+        
+        public static func ==(lhs: TimePickerView.Time, rhs: TimePickerView.Time) -> Bool {
+            return lhs.hour == rhs.hour && lhs.minute == rhs.minute
+        }
+        
+        public func time(byAddingHour hour: Int, andMinutes minutes: Int) -> Time? {
+            guard let date = date else {
+                return nil
+            }
+
+            var components = DateComponents()
+            components.hour = hour
+            components.minute = minutes
+
+            guard let addedDate = Calendar.current.date(byAdding: components, to: date) else {
+                return nil
+            }
+
+            return Time(date: addedDate)
         }
     }
 }

@@ -7,35 +7,20 @@
 
 extension DayDatePickerView {
     public struct Date: Comparable {
-        public static func <(lhs: DayDatePickerView.Date, rhs: DayDatePickerView.Date) -> Bool {
-            if lhs.year < rhs.year {
-                return true
-            } else if lhs.year == rhs.year {
-                if lhs.month < rhs.month {
-                    return true
-                } else if lhs.month == rhs.month && lhs.day < rhs.day {
-                    return true
-                }
-            }
-
-            return false
+        public init(year: Int, month: Int, day: Int) {
+            self.year = year
+            self.month = month
+            self.day = day
         }
-
-        public static func ==(lhs: DayDatePickerView.Date, rhs: DayDatePickerView.Date) -> Bool {
-            return lhs.year == rhs.year && lhs.month == rhs.month && lhs.day == rhs.day
+        
+        public init(date: Foundation.Date) {
+            let components = Calendar.current.dateComponents([.year, .month, .day], from: date)
+            
+            year = components.year ?? 0
+            month = components.month ?? 0
+            day = components.day ?? 0
         }
-
-        public var date: Foundation.Date {
-            get {
-                var components = DateComponents()
-                components.year = year
-                components.month = month
-                components.day = day
-
-                return Calendar.current.date(from: components)!
-            }
-        }
-
+        
         public var year: Int {
             willSet {
                 if let yearsInEra = Calendar.current.range(of: .year, in: .era, for: date) {
@@ -58,6 +43,35 @@ extension DayDatePickerView {
                     precondition(newValue >= daysInMonth.lowerBound && newValue < daysInMonth.upperBound)
                 }
             }
+        }
+        
+        public var date: Foundation.Date {
+            get {
+                var components = DateComponents()
+                components.year = year
+                components.month = month
+                components.day = day
+                
+                return Calendar.current.date(from: components)!
+            }
+        }
+        
+        public static func <(lhs: DayDatePickerView.Date, rhs: DayDatePickerView.Date) -> Bool {
+            if lhs.year < rhs.year {
+                return true
+            } else if lhs.year == rhs.year {
+                if lhs.month < rhs.month {
+                    return true
+                } else if lhs.month == rhs.month && lhs.day < rhs.day {
+                    return true
+                }
+            }
+            
+            return false
+        }
+        
+        public static func ==(lhs: DayDatePickerView.Date, rhs: DayDatePickerView.Date) -> Bool {
+            return lhs.year == rhs.year && lhs.month == rhs.month && lhs.day == rhs.day
         }
     }
 }

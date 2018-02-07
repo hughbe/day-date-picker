@@ -47,6 +47,11 @@ public class DayDatePickerView : UIControl {
         let date = Date(year: year, month: month, day: day)
         setDate(date: date, animated: animated)
     }
+    
+    public func setDate(date: Foundation.Date, animated: Bool) {
+        let dateDate = Date(date: date)
+        setDate(date: dateDate, animated: animated)
+    }
 
     public func setDate(date: Date, animated: Bool) {
         var date = date
@@ -77,6 +82,11 @@ public class DayDatePickerView : UIControl {
     public func setMinDate(year: Int, month: Int, day: Int, animated: Bool) {
         let minDate = Date(year: year, month: month, day: day)
         setMinDate(minDate: minDate, animated: animated)
+    }
+    
+    public func setMinDate(minDate: Foundation.Date, animated: Bool) {
+        let minDateDate = Date(date: minDate)
+        setMinDate(minDate: minDateDate, animated: animated)
     }
 
     public func setMinDate(minDate: Date?, animated: Bool) {
