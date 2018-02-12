@@ -51,7 +51,7 @@ public class TimePickerView : UIControl {
         time.minute = time.minute.round(toNearest: minuteInterval)
         let reloadMinuteTableView = time.hour != _time.hour
         _time = time
-        
+
         if reloadMinuteTableView {
             minuteTableView.reloadAndLayout()
         }
@@ -150,9 +150,6 @@ extension TimePickerView {
 
         hourRange = Calendar.current.range(of: .hour, in: .day, for: Date())
         minuteRange = Calendar.current.range(of: .minute, in: .hour, for: Date())
-
-        superview?.layoutIfNeeded()
-        setTime(time: _time, animated: false)
     }
 
     private func setupTableView(tableView: UITableView) {
@@ -166,10 +163,20 @@ extension TimePickerView {
 
         tableView.delegate = self
         tableView.dataSource = self
-        
+
         tableView.scrollsToTop = false
 
         addSubview(tableView)
+    }
+
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+
+        let contentInset = UIEdgeInsets(top: (frame.size.height - rowHeight) / 2, left: 0, bottom: (frame.size.height - rowHeight) / 2, right: 0)
+        hourTableView.contentInset = contentInset
+        minuteTableView.contentInset = contentInset
+
+        setTime(time: _time, animated: false)
     }
 }
 
@@ -227,11 +234,11 @@ extension TimePickerView : UITableViewDataSource, UITableViewDelegate {
 
         return cell;
     }
-    
+
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return rowHeight
     }
-    
+
     public func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return rowHeight
     }

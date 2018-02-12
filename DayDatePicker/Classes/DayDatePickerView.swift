@@ -47,7 +47,7 @@ public class DayDatePickerView : UIControl {
         let date = Date(year: year, month: month, day: day)
         setDate(date: date, animated: animated)
     }
-    
+
     public func setDate(date: Foundation.Date, animated: Bool) {
         let dateDate = Date(date: date)
         setDate(date: dateDate, animated: animated)
@@ -62,7 +62,7 @@ public class DayDatePickerView : UIControl {
         let reloadMonthTableView = date.year != _date.year
         let reloadDayTableView = reloadMonthTableView || date.month != _date.month
         _date = date
-        
+
         if reloadMonthTableView {
             monthTableView.reloadAndLayout()
         }
@@ -83,7 +83,7 @@ public class DayDatePickerView : UIControl {
         let minDate = Date(year: year, month: month, day: day)
         setMinDate(minDate: minDate, animated: animated)
     }
-    
+
     public func setMinDate(minDate: Foundation.Date, animated: Bool) {
         let minDateDate = Date(date: minDate)
         setMinDate(minDate: minDateDate, animated: animated)
@@ -186,9 +186,6 @@ extension DayDatePickerView {
         dayRange = Calendar.current.range(of: .day, in: .month, for: _date.date)
         monthRange = Calendar.current.range(of: .month, in: .year, for: _date.date)
         yearRange = Calendar.current.range(of: .year, in: .era, for: _date.date)
-
-        superview?.layoutIfNeeded()
-        setDate(date: _date, animated: false)
     }
 
     private func setupTableView(tableView: UITableView) {
@@ -197,7 +194,6 @@ extension DayDatePickerView {
         tableView.showsVerticalScrollIndicator = false
         tableView.separatorStyle = .none
         tableView.backgroundColor = UIColor.white
-        tableView.contentInset = UIEdgeInsets(top: (frame.size.height - rowHeight) / 2, left: 0, bottom: (frame.size.height - rowHeight) / 2, right: 0)
 
         tableView.delegate = self
         tableView.dataSource = self
@@ -205,6 +201,17 @@ extension DayDatePickerView {
         tableView.scrollsToTop = false
 
         addSubview(tableView)
+    }
+
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+
+        let contentInset = UIEdgeInsets(top: (frame.size.height - rowHeight) / 2, left: 0, bottom: (frame.size.height - rowHeight) / 2, right: 0)
+        dayTableView.contentInset = contentInset
+        monthTableView.contentInset = contentInset
+        yearTableView.contentInset = contentInset
+
+        setDate(date: _date, animated: false)
     }
 }
 
@@ -301,7 +308,7 @@ extension DayDatePickerView : UITableViewDataSource, UITableViewDelegate {
 
         alignTableViewToRow(tableView: tableView)
     }
-    
+
     public func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
         guard let tableView = scrollView as? UITableView else {
             return

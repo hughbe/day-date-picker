@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'DayDatePicker'
-  s.version          = '1.4'
+  s.version          = '1.5'
   s.summary          = 'A custom and customizable UIDatePicker which displays the day of the week alongside the day column'
 
   s.description      = <<-DESC
