@@ -48,7 +48,7 @@ public class TimePickerView : UIControl {
             time = minTime
         }
 
-        time.minute = time.minute.round(toNearest: minuteInterval)
+        time.minute = max(0, min(55, time.minute.round(toNearest: minuteInterval)))
         let reloadMinuteTableView = time.hour != _time.hour
         _time = time
 
