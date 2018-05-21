@@ -288,7 +288,7 @@ extension DayDatePickerView : UITableViewDataSource, UITableViewDelegate {
             delegate?.customizeCell(cell: cell, atIndexPath: indexPath, forType: .year)
         }
 
-        return cell;
+        return cell
     }
 
     public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
