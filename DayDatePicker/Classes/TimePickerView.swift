@@ -20,7 +20,9 @@ public class TimePickerView : UIControl {
 
     fileprivate var _time: Time!
     fileprivate var _minTime: Time?
-
+    fileprivate var _textColor: UIColor?
+    fileprivate var _textFont: UIFont?
+    
     public var minTime: Time? {
         get {
             return _minTime
@@ -34,6 +36,22 @@ public class TimePickerView : UIControl {
             return _time
         } set {
             setTime(time: newValue, animated: true)
+        }
+    }
+    
+    public var textFont: UIFont {
+        get {
+            return _textFont ?? UIFont.systemFont(ofSize: 20)
+        } set {
+            setTextWith(font: newValue, color: _textColor)
+        }
+    }
+    
+    public var textColor: UIColor {
+        get {
+            return _textColor ?? .black
+        } set {
+            setTextWith(font: _textFont, color: newValue)
         }
     }
 
@@ -76,6 +94,13 @@ public class TimePickerView : UIControl {
         if let minTime = minTime, time < minTime {
             setTime(time: minTime, animated: animated)
         }
+    }
+    
+    public func setTextWith(font: UIFont?, color: UIColor?) {
+        _textFont = font ?? UIFont.systemFont(ofSize: 20)
+        _textColor = color ?? .black
+        
+        reload()
     }
 
     @IBInspectable
@@ -207,9 +232,9 @@ extension TimePickerView : UITableViewDataSource, UITableViewDelegate {
         let cell = UITableViewCell(style: .default, reuseIdentifier: "Cell")
         cell.selectionStyle = .none
         cell.textLabel?.textAlignment = .center
-        cell.textLabel?.font = UIFont.systemFont(ofSize: 20)
+        cell.textLabel?.font = _textFont
         cell.backgroundColor = UIColor.white
-        cell.textLabel?.textColor = UIColor.black
+        cell.textLabel?.textColor = _textColor
 
         if tableView == hourTableView {
             let hour = hourRange.lowerBound + indexPath.row
