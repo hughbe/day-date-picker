@@ -25,6 +25,7 @@ class DayDatePickerViewController: UIViewController {
     // MARK: - Setup
     private func setup() {
         dayDatePickerView.delegate = self
+        dayDatePickerView.setMaxDate(maxDate: Date(), animated: true)
     }
     
     // MARK: - Actions

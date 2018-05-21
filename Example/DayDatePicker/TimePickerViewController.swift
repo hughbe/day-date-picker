@@ -29,6 +29,8 @@ class TimePickerViewController: UIViewController {
     private func setup() {
         timePickerView.delegate = self
         timePickerView.minuteInterval = step
+        timePickerView.setMinTime(hour: 10, minute: 23, animated: true)
+        timePickerView.setMaxTime(hour: 20, minute: 00, animated: true)
     }
     
     // MARK: - Actions

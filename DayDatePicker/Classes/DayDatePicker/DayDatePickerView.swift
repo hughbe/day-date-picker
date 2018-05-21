@@ -25,6 +25,7 @@ public class DayDatePickerView: UIControl {
     // MARK: - Private Property
     fileprivate var _date: Date!
     fileprivate var _minDate: Date?
+    fileprivate var _maxDate: Date?
     fileprivate var _textColor: UIColor?
     fileprivate var _textFont: UIFont?
     public let overlayView = UIView()
@@ -65,6 +66,14 @@ public class DayDatePickerView: UIControl {
             return _minDate
         } set {
             setMinDate(minDate: newValue, animated: true)
+        }
+    }
+    
+    public var maxDate: Date? {
+        get {
+            return _minDate
+        } set {
+            setMaxDate(maxDate: newValue, animated: true)
         }
     }
 
@@ -113,6 +122,8 @@ public class DayDatePickerView: UIControl {
         var date = date
         if let minTime = _minDate, date < minTime {
             date = minTime
+        } else if let maxDate = _maxDate, date > maxDate {
+            date = maxDate
         }
 
         let reloadMonthTableView = date.year != _date.year
@@ -135,6 +146,7 @@ public class DayDatePickerView: UIControl {
         sendActions(for: .editingChanged)
     }
 
+    // MARK: - Set Min Date
     public func setMinDate(year: Int, month: Int, day: Int, animated: Bool) {
         let minDate = Date(year: year, month: month, day: day)
         setMinDate(minDate: minDate, animated: animated)
@@ -149,11 +161,32 @@ public class DayDatePickerView: UIControl {
         _minDate = minDate
         reload()
 
-        if let minDate = minDate, date < minDate {
+        if let minDate = minDate, date > minDate {
             setDate(date: minDate, animated: true)
         }
     }
-
+    
+    // MARK: - Set Max Date
+    public func setMaxDate(year: Int, month: Int, day: Int, animated: Bool) {
+        let maxDate = Date(year: year, month: month, day: day)
+        setMaxDate(maxDate: maxDate, animated: true)
+    }
+    
+    public func setMaxDate(maxDate: Foundation.Date, animated: Bool) {
+        let maxDateDate = Date(date: maxDate)
+        setMaxDate(maxDate: maxDateDate, animated: animated)
+    }
+    
+    public func setMaxDate(maxDate: Date?, animated: Bool) {
+        _maxDate = maxDate
+        reload()
+        
+        if let maxDate = maxDate, date < maxDate {
+            setDate(date: maxDate, animated: true)
+        }
+    }
+    
+    // MARK: - Set Text
     public func setTextWith(font: UIFont?, color: UIColor?) {
         _textFont = font ?? UIFont.systemFont(ofSize: 20)
         _textColor = color ?? .black
@@ -286,6 +319,8 @@ extension DayDatePickerView: UITableViewDataSource {
             let date = Date(year: year, month: month, day: dayRange.lowerBound + indexPath.row)
             if let minDate = minDate, date < minDate {
                 cell.textLabel?.textColor = UIColor.lightGray
+            } else if let maxDate = maxDate, date > maxDate {
+                cell.textLabel?.textColor = UIColor.lightGray
             }
             
             var dayString = dayFormatter.string(from: date.date)
@@ -300,6 +335,8 @@ extension DayDatePickerView: UITableViewDataSource {
             let month = monthRange.lowerBound + indexPath.row
             if year < minYear || (year == minYear && month < minMonth) {
                 cell.textLabel?.textColor = UIColor.lightGray
+            } else if year > maxYear || (year == maxYear && month > maxMonth) {
+                cell.textLabel?.textColor = UIColor.lightGray
             }
             
             let date = Date(year: year, month: month, day: 1)
@@ -309,6 +346,8 @@ extension DayDatePickerView: UITableViewDataSource {
         } else if tableView == yearTableView {
             let year = yearRange.lowerBound + indexPath.row
             if year < minYear {
+                cell.textLabel?.textColor = UIColor.lightGray
+            } else if year > maxYear {
                 cell.textLabel?.textColor = UIColor.lightGray
             }
             
@@ -400,6 +439,36 @@ extension DayDatePickerView {
         }
         set {
             setMinDate(year: _minDate?.year ?? 0, month: _minDate?.month ?? 0, day: newValue, animated: true)
+        }
+    }
+    
+    @IBInspectable
+    public var maxYear: NSInteger {
+        get {
+            return _maxDate?.year ?? 0
+        }
+        set {
+            setMinDate(year: newValue, month: _maxDate?.month ?? 0, day: _maxDate?.day ?? 0, animated: true)
+        }
+    }
+    
+    @IBInspectable
+    public var maxMonth: NSInteger {
+        get {
+            return _maxDate?.month ?? 0
+        }
+        set {
+            setMinDate(year: _maxDate?.year ?? 0, month: newValue, day: _maxDate?.day ?? 0, animated: true)
+        }
+    }
+    
+    @IBInspectable
+    public var maxDay: NSInteger {
+        get {
+            return _minDate?.day ?? 0
+        }
+        set {
+            setMinDate(year: _maxDate?.year ?? 0, month: _maxDate?.month ?? 0, day: newValue, animated: true)
         }
     }
 

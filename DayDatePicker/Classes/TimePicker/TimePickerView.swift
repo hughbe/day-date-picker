@@ -25,6 +25,7 @@ public class TimePickerView: UIControl {
     // MARK: - Private Property
     fileprivate var _time: Time!
     fileprivate var _minTime: Time?
+    fileprivate var _maxTime: Time?
     fileprivate var _textColor: UIColor?
     fileprivate var _textFont: UIFont?
     public let overlayView = UIView()
@@ -43,6 +44,14 @@ public class TimePickerView: UIControl {
     public var minTime: Time? {
         get {
             return _minTime
+        } set {
+            setMinTime(minTime: newValue, animated: true)
+        }
+    }
+    
+    public var maxTime: Time? {
+        get {
+            return _maxTime
         } set {
             setMinTime(minTime: newValue, animated: true)
         }
@@ -93,6 +102,8 @@ public class TimePickerView: UIControl {
         var time = time
         if let minTime = _minTime, time < minTime {
             time = minTime
+        } else if let maxTime = _maxTime, time > maxTime {
+            time = maxTime
         }
 
         time.minute = max(0, min(59, time.minute.round(toNearest: minuteInterval)))
@@ -111,6 +122,7 @@ public class TimePickerView: UIControl {
         sendActions(for: .editingChanged)
     }
 
+    // MARK: - Set Min Time
     public func setMinTime(hour: Int, minute: Int, animated: Bool) {
         let minTime = Time(hour: hour, minute: minute)
         setMinTime(minTime: minTime, animated: animated)
@@ -125,6 +137,22 @@ public class TimePickerView: UIControl {
         }
     }
     
+    // MARK: - Set Max Time
+    public func setMaxTime(hour: Int, minute: Int, animated: Bool) {
+        let maxTime = Time(hour: hour, minute: minute)
+        setMaxTime(maxTime: maxTime, animated: animated)
+    }
+    
+    public func setMaxTime(maxTime: Time?, animated: Bool) {
+        _maxTime = maxTime
+        reload()
+        
+        if let maxTime = maxTime, time > maxTime {
+            setTime(time: maxTime, animated: animated)
+        }
+    }
+    
+    // MARK: - Set Text
     public func setTextWith(font: UIFont?, color: UIColor?) {
         _textFont = font ?? UIFont.systemFont(ofSize: 20)
         _textColor = color ?? .black
@@ -243,6 +271,8 @@ extension TimePickerView: UITableViewDataSource {
             let hour = hourRange.lowerBound + indexPath.row
             if hour < minHour {
                 cell.textLabel?.textColor = UIColor.lightGray
+            } else if hour > maxHour {
+                cell.textLabel?.textColor = UIColor.lightGray
             }
             
             cell.textLabel?.text = String(hour)
@@ -252,6 +282,8 @@ extension TimePickerView: UITableViewDataSource {
             let minute = minuteRange.lowerBound + indexPath.row * minuteInterval
             let time = Time(hour: hour, minute: minute)
             if let minTime = minTime, time < minTime {
+                cell.textLabel?.textColor = UIColor.lightGray
+            } else if let maxTime = maxTime, time > maxTime {
                 cell.textLabel?.textColor = UIColor.lightGray
             }
             
@@ -337,6 +369,26 @@ extension TimePickerView {
         }
         set {
             setMinTime(hour: _minTime?.hour ?? 0, minute: newValue, animated: true)
+        }
+    }
+    
+    @IBInspectable
+    public var maxHour: NSInteger {
+        get {
+            return _maxTime?.hour ?? 0
+        }
+        set {
+            setMinTime(hour: newValue, minute: _maxTime?.minute ?? 0, animated: true)
+        }
+    }
+    
+    @IBInspectable
+    public var maxMinute: NSInteger {
+        get {
+            return _maxTime?.minute ?? 0
+        }
+        set {
+            setMinTime(hour: _maxTime?.hour ?? 0, minute: newValue, animated: true)
         }
     }
 
