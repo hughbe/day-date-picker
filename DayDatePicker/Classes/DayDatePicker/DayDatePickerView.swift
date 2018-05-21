@@ -8,21 +8,58 @@
 import UIKit
 
 @IBDesignable
-public class DayDatePickerView : UIControl {
+public class DayDatePickerView: UIControl {
+    
+    // MARK: - Init
     public override init(frame: CGRect) {
         super.init(frame: frame)
+        
         setup()
     }
-
     public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        
+        setup()
     }
-
+    
+    // MARK: - Private Property
     fileprivate var _date: Date!
     fileprivate var _minDate: Date?
     fileprivate var _textColor: UIColor?
     fileprivate var _textFont: UIFont?
+    public let overlayView = UIView()
 
+    // MARK: - Table View Property
+    fileprivate let dayTableView = UITableView()
+    fileprivate let monthTableView = UITableView()
+    fileprivate let yearTableView = UITableView()
+    fileprivate var rowHeight: CGFloat = 44
+    fileprivate var yearRange: Range<Int>!
+    fileprivate var monthRange: Range<Int>!
+    fileprivate var dayRange: Range<Int>!
+    
+    public var dayFormatter = DateFormatter(format: "EEE d") {
+        didSet {
+            dayTableView.reloadData()
+        }
+    }
+    
+    public var monthFormatter = DateFormatter(format: "MMM") {
+        didSet {
+            monthTableView.reloadData()
+        }
+    }
+    
+    public var yearFormatter = DateFormatter(format: "yyyy") {
+        didSet {
+            yearTableView.reloadData()
+        }
+    }
+    
+    // MARK: - Delegate
+    @IBOutlet public var delegate: DayDatePickerViewDelegate?
+
+    // MARK: - Public Property
     public var minDate: Date? {
         get {
             return _minDate
@@ -71,6 +108,7 @@ public class DayDatePickerView : UIControl {
         setDate(date: dateDate, animated: animated)
     }
 
+    // MARK: - Public methods
     public func setDate(date: Date, animated: Bool) {
         var date = date
         if let minTime = _minDate, date < minTime {
@@ -122,50 +160,33 @@ public class DayDatePickerView : UIControl {
         
         reload()
     }
-    
-    fileprivate let dayTableView = UITableView()
-    fileprivate let monthTableView = UITableView()
-    fileprivate let yearTableView = UITableView()
-    public let overlayView = UIView()
-
-    public var dayFormatter = DateFormatter(format: "EEE d") {
-        didSet {
-            dayTableView.reloadData()
-        }
-    }
-
-    public var monthFormatter = DateFormatter(format: "MMM") {
-        didSet {
-            monthTableView.reloadData()
-        }
-    }
-
-    public var yearFormatter = DateFormatter(format: "yyyy") {
-        didSet {
-            yearTableView.reloadData()
-        }
-    }
-
-    fileprivate var rowHeight: CGFloat = 44
-    @IBOutlet public var delegate: DayDatePickerViewDelegate?
-
-    fileprivate var yearRange: Range<Int>!
-    fileprivate var monthRange: Range<Int>!
-    fileprivate var dayRange: Range<Int>!
 }
 
 // Layout actions.
 extension DayDatePickerView {
+    // MARK: - Override Interface Builder
     public override func prepareForInterfaceBuilder() {
         super.prepareForInterfaceBuilder()
+        
         setup()
     }
-
     public override func awakeFromNib() {
         super.awakeFromNib()
+        
         setup()
     }
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        let contentInset = UIEdgeInsets(top: (frame.size.height - rowHeight) / 2, left: 0, bottom: (frame.size.height - rowHeight) / 2, right: 0)
+        dayTableView.contentInset = contentInset
+        monthTableView.contentInset = contentInset
+        yearTableView.contentInset = contentInset
+        
+        setDate(date: _date, animated: false)
+    }
 
+    // MARK: - Setup
     fileprivate func setup() {
         if yearTableView.superview != nil {
             return
@@ -227,27 +248,10 @@ extension DayDatePickerView {
 
         addSubview(tableView)
     }
-
-    public override func layoutSubviews() {
-        super.layoutSubviews()
-
-        let contentInset = UIEdgeInsets(top: (frame.size.height - rowHeight) / 2, left: 0, bottom: (frame.size.height - rowHeight) / 2, right: 0)
-        dayTableView.contentInset = contentInset
-        monthTableView.contentInset = contentInset
-        yearTableView.contentInset = contentInset
-
-        setDate(date: _date, animated: false)
-    }
 }
 
-// Table view data.
-extension DayDatePickerView : UITableViewDataSource, UITableViewDelegate {
-    public func reload() {
-        dayTableView.reloadAndLayout()
-        monthTableView.reloadAndLayout()
-        yearTableView.reloadAndLayout()
-    }
-
+// MARK: - Table View Data Source
+extension DayDatePickerView: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == dayTableView {
             if let daysInAMonth = Calendar.current.range(of: .day, in: .month, for: date.date) {
@@ -265,10 +269,10 @@ extension DayDatePickerView : UITableViewDataSource, UITableViewDelegate {
                 return yearsInAnEra.count
             }
         }
-
+        
         return 0
     }
-
+    
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: "Cell")
         cell.selectionStyle = .none
@@ -277,44 +281,53 @@ extension DayDatePickerView : UITableViewDataSource, UITableViewDelegate {
         cell.textLabel?.font = textFont
         cell.backgroundColor = UIColor.white
         cell.textLabel?.textColor = textColor
-
+        
         if tableView == dayTableView {
             let date = Date(year: year, month: month, day: dayRange.lowerBound + indexPath.row)
             if let minDate = minDate, date < minDate {
                 cell.textLabel?.textColor = UIColor.lightGray
             }
-
+            
             var dayString = dayFormatter.string(from: date.date)
             if showOrdinalIndicator {
                 dayString.append(date.day.ordinalIndicatorString)
             }
-
+            
             cell.textLabel?.text = dayString
-
+            
             delegate?.customizeCell(cell: cell, atIndexPath: indexPath, forType: .day)
         } else if tableView == monthTableView {
             let month = monthRange.lowerBound + indexPath.row
             if year < minYear || (year == minYear && month < minMonth) {
                 cell.textLabel?.textColor = UIColor.lightGray
             }
-
+            
             let date = Date(year: year, month: month, day: 1)
             cell.textLabel?.text = monthFormatter.string(from: date.date)
-
+            
             delegate?.customizeCell(cell: cell, atIndexPath: indexPath, forType: .month)
         } else if tableView == yearTableView {
             let year = yearRange.lowerBound + indexPath.row
             if year < minYear {
                 cell.textLabel?.textColor = UIColor.lightGray
             }
-
+            
             let date = Date(year: year, month: 1, day: 1)
             cell.textLabel?.text = yearFormatter.string(from: date.date)
-
+            
             delegate?.customizeCell(cell: cell, atIndexPath: indexPath, forType: .year)
         }
-
+        
         return cell
+    }
+}
+
+// Table view data.
+extension DayDatePickerView: UITableViewDelegate {
+    public func reload() {
+        dayTableView.reloadAndLayout()
+        monthTableView.reloadAndLayout()
+        yearTableView.reloadAndLayout()
     }
 
     public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {

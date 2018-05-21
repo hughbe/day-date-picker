@@ -8,7 +8,9 @@
 import UIKit
 
 @IBDesignable
-public class TimePickerView : UIControl {
+public class TimePickerView: UIControl {
+    
+    // MARK: - Init
     public override init(frame: CGRect) {
         super.init(frame: frame)
         setup()
@@ -16,13 +18,28 @@ public class TimePickerView : UIControl {
 
     public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        
+        setup()
     }
 
+    // MARK: - Private Property
     fileprivate var _time: Time!
     fileprivate var _minTime: Time?
     fileprivate var _textColor: UIColor?
     fileprivate var _textFont: UIFont?
+    public let overlayView = UIView()
+
+    // MARK: - Table View Property
+    fileprivate let hourTableView = UITableView()
+    fileprivate let minuteTableView = UITableView()
+    fileprivate var rowHeight: CGFloat = 44
+    fileprivate var hourRange: Range<Int>!
+    fileprivate var minuteRange: Range<Int>!
     
+    // MARK: - Delegate
+    @IBOutlet public var delegate: TimePickerViewDelegate?
+
+    // MARK: - Public Property
     public var minTime: Time? {
         get {
             return _minTime
@@ -54,7 +71,19 @@ public class TimePickerView : UIControl {
             setTextWith(font: _textFont, color: newValue)
         }
     }
-
+    
+    @IBInspectable
+    public var minuteInterval: NSInteger = 5 {
+        willSet {
+            if let secondsInMinute = NSCalendar.current.range(of: .second, in: .minute, for: Date()) {
+                precondition(newValue >= secondsInMinute.lowerBound && secondsInMinute.upperBound % newValue == 0, "The time interval has to be a positive number. 60 must be divisible by the interval.")
+            }
+        } didSet {
+            minuteTableView.reloadData()
+        }
+    }
+    
+    // MARK: - Public methods
     public func setTime(hour: Int, minute: Int, animated: Bool) {
         let time = Time(hour: hour, minute: minute)
         setTime(time: time, animated: animated)
@@ -102,41 +131,30 @@ public class TimePickerView : UIControl {
         
         reload()
     }
-
-    @IBInspectable
-    public var minuteInterval: NSInteger = 5 {
-        willSet {
-            if let secondsInMinute = NSCalendar.current.range(of: .second, in: .minute, for: Date()) {
-                precondition(newValue >= secondsInMinute.lowerBound && secondsInMinute.upperBound % newValue == 0, "The time interval has to be a positive number. 60 must be divisible by the interval.")
-            }
-        } didSet {
-            minuteTableView.reloadData()
-        }
-    }
-
-    fileprivate let hourTableView = UITableView()
-    fileprivate let minuteTableView = UITableView()
-    public let overlayView = UIView()
-
-    fileprivate var rowHeight: CGFloat = 44
-    @IBOutlet public var delegate: TimePickerViewDelegate?
-
-    fileprivate var hourRange: Range<Int>!
-    fileprivate var minuteRange: Range<Int>!
 }
 
 // Layout actions.
 extension TimePickerView {
+    // MARK: - Override Interface Builder
     public override func prepareForInterfaceBuilder() {
         super.prepareForInterfaceBuilder()
         setup()
     }
-
     public override func awakeFromNib() {
         super.awakeFromNib()
         setup()
     }
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        let contentInset = UIEdgeInsets(top: (frame.size.height - rowHeight) / 2, left: 0, bottom: (frame.size.height - rowHeight) / 2, right: 0)
+        hourTableView.contentInset = contentInset
+        minuteTableView.contentInset = contentInset
+        
+        setTime(time: _time, animated: false)
+    }
 
+    // MARK: - Setup
     fileprivate func setup() {
         if hourTableView.superview != nil {
             return
@@ -193,25 +211,10 @@ extension TimePickerView {
 
         addSubview(tableView)
     }
-
-    public override func layoutSubviews() {
-        super.layoutSubviews()
-
-        let contentInset = UIEdgeInsets(top: (frame.size.height - rowHeight) / 2, left: 0, bottom: (frame.size.height - rowHeight) / 2, right: 0)
-        hourTableView.contentInset = contentInset
-        minuteTableView.contentInset = contentInset
-
-        setTime(time: _time, animated: false)
-    }
 }
 
-// Table view data.
-extension TimePickerView : UITableViewDataSource, UITableViewDelegate {
-    public func reload() {
-        hourTableView.reloadAndLayout()
-        minuteTableView.reloadAndLayout()
-    }
-
+// MARK: - Table View Data Source
+extension TimePickerView: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == hourTableView {
             if let hoursInDay = Calendar.current.range(of: .hour, in: .day, for: Date()) {
@@ -224,10 +227,10 @@ extension TimePickerView : UITableViewDataSource, UITableViewDelegate {
                 return minutesInAnHour.count / minuteInterval
             }
         }
-
+        
         return 0
     }
-
+    
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: "Cell")
         cell.selectionStyle = .none
@@ -235,15 +238,15 @@ extension TimePickerView : UITableViewDataSource, UITableViewDelegate {
         cell.textLabel?.font = _textFont
         cell.backgroundColor = UIColor.white
         cell.textLabel?.textColor = _textColor
-
+        
         if tableView == hourTableView {
             let hour = hourRange.lowerBound + indexPath.row
             if hour < minHour {
                 cell.textLabel?.textColor = UIColor.lightGray
             }
-
+            
             cell.textLabel?.text = String(hour)
-
+            
             delegate?.customizeCell(cell: cell, atIndexPath: indexPath, forType: .hour)
         } else if tableView == minuteTableView {
             let minute = minuteRange.lowerBound + indexPath.row * minuteInterval
@@ -251,15 +254,18 @@ extension TimePickerView : UITableViewDataSource, UITableViewDelegate {
             if let minTime = minTime, time < minTime {
                 cell.textLabel?.textColor = UIColor.lightGray
             }
-
+            
             cell.textLabel?.text = String(time.minute)
-
+            
             delegate?.customizeCell(cell: cell, atIndexPath: indexPath, forType: .minute)
         }
-
-        return cell;
+        
+        return cell
     }
+}
 
+// MARK: - Table View Delegate
+extension TimePickerView: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return rowHeight
     }
@@ -304,6 +310,11 @@ extension TimePickerView : UITableViewDataSource, UITableViewDelegate {
         }
         
         delegate?.didSelectTime(hour: hour, minute: minute)
+    }
+    
+    public func reload() {
+        hourTableView.reloadAndLayout()
+        minuteTableView.reloadAndLayout()
     }
 }
 
