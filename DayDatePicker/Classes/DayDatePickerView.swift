@@ -20,6 +20,8 @@ public class DayDatePickerView : UIControl {
 
     fileprivate var _date: Date!
     fileprivate var _minDate: Date?
+    fileprivate var _textColor: UIColor?
+    fileprivate var _textFont: UIFont?
 
     public var minDate: Date? {
         get {
@@ -34,6 +36,22 @@ public class DayDatePickerView : UIControl {
             return _date
         } set {
             setDate(date: newValue, animated: true)
+        }
+    }
+    
+    public var textFont: UIFont {
+        get {
+            return _textFont ?? UIFont.systemFont(ofSize: 20)
+        } set {
+            setTextWith(font: newValue, color: _textColor)
+        }
+    }
+    
+    public var textColor: UIColor {
+        get {
+            return _textColor ?? .black
+        } set {
+            setTextWith(font: textFont, color: newValue)
         }
     }
 
@@ -98,6 +116,13 @@ public class DayDatePickerView : UIControl {
         }
     }
 
+    public func setTextWith(font: UIFont?, color: UIColor?) {
+        _textFont = font ?? UIFont.systemFont(ofSize: 20)
+        _textColor = color ?? .black
+        
+        reload()
+    }
+    
     fileprivate let dayTableView = UITableView()
     fileprivate let monthTableView = UITableView()
     fileprivate let yearTableView = UITableView()
@@ -247,10 +272,11 @@ extension DayDatePickerView : UITableViewDataSource, UITableViewDelegate {
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: "Cell")
         cell.selectionStyle = .none
+        
         cell.textLabel?.textAlignment = .center
-        cell.textLabel?.font = UIFont.systemFont(ofSize: 20)
+        cell.textLabel?.font = textFont
         cell.backgroundColor = UIColor.white
-        cell.textLabel?.textColor = UIColor.black
+        cell.textLabel?.textColor = textColor
 
         if tableView == dayTableView {
             let date = Date(year: year, month: month, day: dayRange.lowerBound + indexPath.row)
@@ -288,7 +314,7 @@ extension DayDatePickerView : UITableViewDataSource, UITableViewDelegate {
             delegate?.customizeCell(cell: cell, atIndexPath: indexPath, forType: .year)
         }
 
-        return cell;
+        return cell
     }
 
     public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {

@@ -15,7 +15,7 @@ internal extension Int {
     var ordinalIndicatorString: String {
         get {
             switch self {
-            case 1, 21, 32:
+            case 1, 21, 31:
                 return "st"
             case 2, 22, 32:
                 return "nd"
