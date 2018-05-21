@@ -302,6 +302,8 @@ extension TimePickerView : UITableViewDataSource, UITableViewDelegate {
         } else if tableView == minuteTableView {
             minute = minuteRange.lowerBound + row * minuteInterval
         }
+        
+        delegate?.didSelectTime(hour: hour, minute: minute)
     }
 }
 

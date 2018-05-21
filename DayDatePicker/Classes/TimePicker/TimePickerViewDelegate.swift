@@ -15,6 +15,7 @@ import UIKit
 
 @objc public protocol TimePickerViewDelegate {
     func customizeCell(cell: UITableViewCell, atIndexPath indexPath: IndexPath, forType type: TimePickerViewColumn)
+    func didSelectTime(hour: NSInteger, minute: NSInteger)
 }
 
 extension TimePickerViewDelegate {

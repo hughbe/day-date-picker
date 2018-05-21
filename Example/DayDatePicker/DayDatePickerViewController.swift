@@ -10,9 +10,24 @@ import UIKit
 import DayDatePicker
 
 class DayDatePickerViewController: UIViewController {
+    
+    // MARK: - Outlets
     @IBOutlet weak var dayDatePickerView: DayDatePickerView!
     @IBOutlet weak var dayDateLabel: UILabel!
     
+    // MARK: - Override
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        setup()
+    }
+    
+    // MARK: - Setup
+    private func setup() {
+        dayDatePickerView.delegate = self
+    }
+    
+    // MARK: - Actions
     @IBAction func setDateTo20February2017(_ sender: Any) {
         dayDatePickerView.setDate(year: 2017, month: 2, day: 20, animated: true)
     }
@@ -30,3 +45,12 @@ class DayDatePickerViewController: UIViewController {
     }
 }
 
+// MARK: - Day Date Picker View Delegate
+extension DayDatePickerViewController: DayDatePickerViewDelegate {
+    func customizeCell(cell: UITableViewCell, atIndexPath indexPath: IndexPath, forType type: DayDatePickerViewColumn) {
+    }
+    
+    func didSelectDate(day: NSInteger, month: NSInteger, year: NSInteger) {
+        dayDateLabel.text = String(format: "%02d/%02d/%04d", day, month, year)
+    }
+}

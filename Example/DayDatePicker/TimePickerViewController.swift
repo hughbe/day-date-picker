@@ -10,9 +10,28 @@ import UIKit
 import DayDatePicker
 
 class TimePickerViewController: UIViewController {
+    
+    // MARK: - Outlets
     @IBOutlet weak var timePickerView: TimePickerView!
     @IBOutlet weak var timeLabel: UILabel!
 
+    // MARK: - Variables
+    private let step = 1
+    
+    // MARK: - Override
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        setup()
+    }
+    
+    // MARK: - Setup
+    private func setup() {
+        timePickerView.delegate = self
+        timePickerView.minuteInterval = step
+    }
+    
+    // MARK: - Actions
     @IBAction func setToTenFifteen(_ sender: Any) {
         timePickerView.setTime(hour: 10, minute: 15, animated: true)
     }
@@ -27,5 +46,16 @@ class TimePickerViewController: UIViewController {
 
     @IBAction func timePickerChanged(_ sender: TimePickerView) {
         timeLabel.text = String(format: "%02d:%02d", sender.hour, sender.minute)
+    }
+}
+
+// MARK: - Time Picker View Delegate
+extension TimePickerViewController: TimePickerViewDelegate {
+    func customizeCell(cell: UITableViewCell, atIndexPath indexPath: IndexPath, forType type: TimePickerViewColumn) {
+        
+    }
+    
+    func didSelectTime(hour: NSInteger, minute: NSInteger) {
+        timeLabel.text = String(format: "%02d:%02d", hour, minute)
     }
 }

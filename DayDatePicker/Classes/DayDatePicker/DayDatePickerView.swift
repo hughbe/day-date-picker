@@ -353,6 +353,8 @@ extension DayDatePickerView : UITableViewDataSource, UITableViewDelegate {
         } else if tableView == yearTableView {
             year = yearRange.lowerBound + row
         }
+        
+        delegate?.didSelectDate(day: day, month: month, year: year)
     }
 }
 
