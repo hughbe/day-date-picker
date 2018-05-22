@@ -27,7 +27,11 @@ public class TimePickerView: UIControl {
     fileprivate var _textColor: UIColor?
     fileprivate var _textFont: UIFont?
     public let overlayView = UIView()
-
+    private let kMaxHour = 24
+    private let kMaxMinute = 60
+    private let kMinHour = 0
+    private let kMinMinute = 0
+    
     // MARK: - Table View Property
     fileprivate let hourTableView = UITableView()
     fileprivate let minuteTableView = UITableView()
@@ -353,40 +357,40 @@ extension TimePickerView {
     @IBInspectable
     public var minHour: NSInteger {
         get {
-            return _minTime?.hour ?? 0
+            return _minTime?.hour ?? kMinHour
         }
         set {
-            setMinTime(hour: newValue, minute: _minTime?.minute ?? 0, animated: true)
+            setMinTime(hour: newValue, minute: _minTime?.minute ?? kMinMinute, animated: true)
         }
     }
 
     @IBInspectable
     public var minMinute: NSInteger {
         get {
-            return _minTime?.minute ?? 0
+            return _minTime?.minute ?? kMinMinute
         }
         set {
-            setMinTime(hour: _minTime?.hour ?? 0, minute: newValue, animated: true)
+            setMinTime(hour: _minTime?.hour ?? kMinHour, minute: newValue, animated: true)
         }
     }
     
     @IBInspectable
     public var maxHour: NSInteger {
         get {
-            return _maxTime?.hour ?? 0
+            return _maxTime?.hour ?? kMaxHour
         }
         set {
-            setMinTime(hour: newValue, minute: _maxTime?.minute ?? 0, animated: true)
+            setMinTime(hour: newValue, minute: _maxTime?.minute ?? kMaxMinute, animated: true)
         }
     }
     
     @IBInspectable
     public var maxMinute: NSInteger {
         get {
-            return _maxTime?.minute ?? 0
+            return _maxTime?.minute ?? kMaxMinute
         }
         set {
-            setMinTime(hour: _maxTime?.hour ?? 0, minute: newValue, animated: true)
+            setMinTime(hour: _maxTime?.hour ?? kMaxHour, minute: newValue, animated: true)
         }
     }
 
