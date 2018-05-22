@@ -100,6 +100,11 @@ public class TimePickerView: UIControl {
         setTime(time: time, animated: animated)
     }
 
+    public func setTime(date: Foundation.Date, animated: Bool) {
+        let time = Time(date: date)
+        setTime(time: time, animated: animated)
+    }
+
     public func setTime(time: Time, animated: Bool) {
         var time = time
         if let minTime = _minTime, time < minTime {
