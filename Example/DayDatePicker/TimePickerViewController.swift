@@ -53,10 +53,6 @@ class TimePickerViewController: UIViewController {
 
 // MARK: - Time Picker View Delegate
 extension TimePickerViewController: TimePickerViewDelegate {
-    func customizeCell(cell: UITableViewCell, atIndexPath indexPath: IndexPath, forType type: TimePickerViewColumn) {
-        
-    }
-    
     func didSelectTime(hour: NSInteger, minute: NSInteger) {
         timeLabel.text = String(format: "%02d:%02d", hour, minute)
     }

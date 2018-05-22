@@ -47,10 +47,7 @@ class DayDatePickerViewController: UIViewController {
 }
 
 // MARK: - Day Date Picker View Delegate
-extension DayDatePickerViewController: DayDatePickerViewDelegate {
-    func customizeCell(cell: UITableViewCell, atIndexPath indexPath: IndexPath, forType type: DayDatePickerViewColumn) {
-    }
-    
+extension DayDatePickerViewController: DayDatePickerViewDelegate {    
     func didSelectDate(day: NSInteger, month: NSInteger, year: NSInteger) {
         dayDateLabel.text = String(format: "%02d/%02d/%04d", day, month, year)
     }
