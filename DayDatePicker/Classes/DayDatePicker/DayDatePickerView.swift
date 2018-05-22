@@ -161,7 +161,7 @@ public class DayDatePickerView: UIControl {
         _minDate = minDate
         reload()
 
-        if let minDate = minDate, date > minDate {
+        if let minDate = minDate, date < minDate {
             setDate(date: minDate, animated: true)
         }
     }
@@ -181,7 +181,7 @@ public class DayDatePickerView: UIControl {
         _maxDate = maxDate
         reload()
         
-        if let maxDate = maxDate, date < maxDate {
+        if let maxDate = maxDate, date > maxDate {
             setDate(date: maxDate, animated: true)
         }
     }
