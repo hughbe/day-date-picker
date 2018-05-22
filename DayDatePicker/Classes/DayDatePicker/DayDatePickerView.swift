@@ -18,8 +18,6 @@ public class DayDatePickerView: UIControl {
     }
     public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        
-        setup()
     }
     
     // MARK: - Private Property
