@@ -132,12 +132,21 @@ public class DayDatePickerView: UIControl {
 
         let reloadMonthTableView = date.year != _date.year
         let reloadDayTableView = reloadMonthTableView || date.month != _date.month
+        
         _date = date
 
         if reloadMonthTableView {
             monthTableView.reloadAndLayout()
         }
         if reloadDayTableView {
+            let startMonth = Date(year: year, month: month, day: 1)
+            if let selectedMonthRange = Calendar.current.range(of: .day, in: .month, for: startMonth.date),
+                let dataRange = Calendar.current.range(of: .day, in: .month, for: date.date),
+                dataRange.count > selectedMonthRange.count {
+                date = Date(year: year, month: month, day: selectedMonthRange.count)
+                _date = date
+            }
+            
             dayTableView.reloadAndLayout()
         }
 
