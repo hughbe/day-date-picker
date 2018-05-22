@@ -27,12 +27,12 @@ public class DayDatePickerView: UIControl {
     fileprivate var _textColor: UIColor?
     fileprivate var _textFont: UIFont?
     public let overlayView = UIView()
-    private let kMaxDay = 365
-    private let kMaxMonth = 12
-    private let kMaxYear = NSInteger.max
-    private let kMinDay = 0
-    private let kMinMonth = 0
-    private let kMinYear = 0
+    private let MaxDay = 365
+    private let MaxMonth = 12
+    private let MaxYear = NSInteger.max
+    private let MinDay = 0
+    private let MinMonth = 0
+    private let MinYear = 0
     
     // MARK: - Table View Property
     fileprivate let dayTableView = UITableView()
@@ -428,90 +428,90 @@ extension DayDatePickerView {
     @IBInspectable
     public var minYear: NSInteger {
         get {
-            return _minDate?.year ?? kMinYear
+            return _minDate?.year ?? MinYear
         }
         set {
-            setMinDate(year: newValue, month: _minDate?.month ?? kMinMonth, day: _minDate?.day ?? kMinDay, animated: true)
+            setMinDate(year: newValue, month: _minDate?.month ?? MinMonth, day: _minDate?.day ?? MinDay, animated: true)
         }
     }
 
     @IBInspectable
     public var minMonth: NSInteger {
         get {
-            return _minDate?.month ?? kMinMonth
+            return _minDate?.month ?? MinMonth
         }
         set {
-            setMinDate(year: _minDate?.year ?? kMinYear, month: newValue, day: _minDate?.day ?? kMinDay, animated: true)
+            setMinDate(year: _minDate?.year ?? MinYear, month: newValue, day: _minDate?.day ?? MinDay, animated: true)
         }
     }
 
     @IBInspectable
     public var minDay: NSInteger {
         get {
-            return _minDate?.day ?? kMinDay
+            return _minDate?.day ?? MinDay
         }
         set {
-            setMinDate(year: _minDate?.year ?? kMinYear, month: _minDate?.month ?? kMinMonth, day: newValue, animated: true)
+            setMinDate(year: _minDate?.year ?? MinYear, month: _minDate?.month ?? MinMonth, day: newValue, animated: true)
         }
     }
     
     @IBInspectable
     public var maxYear: NSInteger {
         get {
-            return _maxDate?.year ?? kMaxYear
+            return _maxDate?.year ?? MaxYear
         }
         set {
-            setMinDate(year: newValue, month: _maxDate?.month ?? kMaxMonth, day: _maxDate?.day ?? kMaxDay, animated: true)
+            setMinDate(year: newValue, month: _maxDate?.month ?? MaxMonth, day: _maxDate?.day ?? MaxDay, animated: true)
         }
     }
     
     @IBInspectable
     public var maxMonth: NSInteger {
         get {
-            return _maxDate?.month ?? kMaxMonth
+            return _maxDate?.month ?? MaxMonth
         }
         set {
-            setMinDate(year: _maxDate?.year ?? kMaxYear, month: newValue, day: _maxDate?.day ?? kMaxDay, animated: true)
+            setMinDate(year: _maxDate?.year ?? MaxYear, month: newValue, day: _maxDate?.day ?? MaxDay, animated: true)
         }
     }
     
     @IBInspectable
     public var maxDay: NSInteger {
         get {
-            return _maxDate?.day ?? kMaxDay
+            return _maxDate?.day ?? MaxDay
         }
         set {
-            setMinDate(year: _maxDate?.year ?? kMaxYear, month: _maxDate?.month ?? kMaxMonth, day: newValue, animated: true)
+            setMinDate(year: _maxDate?.year ?? MaxYear, month: _maxDate?.month ?? MaxMonth, day: newValue, animated: true)
         }
     }
 
     @IBInspectable
     public var year: NSInteger {
         get {
-            return _date?.year ?? kMinYear
+            return _date?.year ?? MinYear
         }
         set {
-            setDate(year: newValue, month: _date?.month ?? kMinMonth, day: _date?.day ?? kMinDay, animated: true)
+            setDate(year: newValue, month: _date?.month ?? MinMonth, day: _date?.day ?? MinDay, animated: true)
         }
     }
 
     @IBInspectable
     public var month: NSInteger {
         get {
-            return _date?.month ?? kMinMonth
+            return _date?.month ?? MinMonth
         }
         set {
-            setDate(year: _date?.year ?? kMinYear, month: newValue, day: _date?.day ?? kMinDay, animated: true)
+            setDate(year: _date?.year ?? MinYear, month: newValue, day: _date?.day ?? MinDay, animated: true)
         }
     }
 
     @IBInspectable
     public var day: NSInteger {
         get {
-            return _date?.day ?? kMinDay
+            return _date?.day ?? MinDay
         }
         set {
-            setDate(year: _date?.year ?? kMinYear, month: _date?.month ?? kMinMonth, day: newValue, animated: true)
+            setDate(year: _date?.year ?? MinYear, month: _date?.month ?? MinMonth, day: newValue, animated: true)
         }
     }
 }
