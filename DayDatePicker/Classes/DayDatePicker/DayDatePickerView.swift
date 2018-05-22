@@ -75,7 +75,7 @@ public class DayDatePickerView: UIControl {
     
     public var maxDate: Date? {
         get {
-            return _minDate
+            return _maxDate
         } set {
             setMaxDate(maxDate: newValue, animated: true)
         }
