@@ -14,7 +14,7 @@ import UIKit
 }
 
 @objc public protocol DayDatePickerViewDelegate {
-    func customizeCell(cell: UITableViewCell, atIndexPath indexPath: IndexPath, forType type: DayDatePickerViewColumn)
+    @objc optional func customizeCell(cell: UITableViewCell, atIndexPath indexPath: IndexPath, forType type: DayDatePickerViewColumn)
     func didSelectDate(day: NSInteger, month: NSInteger, year: NSInteger)
 }
 
