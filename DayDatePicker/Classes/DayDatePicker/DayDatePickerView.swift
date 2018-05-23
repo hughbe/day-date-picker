@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import AudioToolbox // Sound list: https://github.com/klaas/SwiftySystemSounds
 
 @IBDesignable
 public class DayDatePickerView: UIControl {
@@ -383,6 +384,21 @@ extension DayDatePickerView: UITableViewDelegate {
         dayTableView.reloadAndLayout()
         monthTableView.reloadAndLayout()
         yearTableView.reloadAndLayout()
+    }
+
+    public func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if tableView.isDragging {
+            if #available(iOS 10.0, *) {
+                let selectionFeedbackGenerator = UISelectionFeedbackGenerator()
+                selectionFeedbackGenerator.selectionChanged()
+            }
+            
+            let urlString = "System/Library/Audio/UISounds/nano/TimerWheelHoursDetent_Haptic.caf"
+            let url = URL(fileURLWithPath: urlString)
+            var soundID: SystemSoundID = 0
+            AudioServicesCreateSystemSoundID(url as CFURL, &soundID)
+            AudioServicesPlaySystemSound(soundID)
+        }
     }
 
     public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
