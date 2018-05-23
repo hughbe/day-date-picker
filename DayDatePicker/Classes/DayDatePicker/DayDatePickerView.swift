@@ -168,9 +168,9 @@ public class DayDatePickerView: UIControl {
         setMinDate(minDate: minDate, animated: animated)
     }
 
-    public func setMinDate(minDate: Foundation.Date, animated: Bool) {
-        let minDateDate = Date(date: minDate)
-        setMinDate(minDate: minDateDate, animated: animated)
+    public func setMinDate(_ date: Foundation.Date, animated: Bool) {
+        let minDate = Date(date: date)
+        setMinDate(minDate: minDate, animated: animated)
     }
 
     public func setMinDate(minDate: Date?, animated: Bool) {
@@ -188,9 +188,9 @@ public class DayDatePickerView: UIControl {
         setMaxDate(maxDate: maxDate, animated: true)
     }
     
-    public func setMaxDate(maxDate: Foundation.Date, animated: Bool) {
-        let maxDateDate = Date(date: maxDate)
-        setMaxDate(maxDate: maxDateDate, animated: animated)
+    public func setMaxDate(_ date: Foundation.Date, animated: Bool) {
+        let maxDate = Date(date: date)
+        setMaxDate(maxDate: maxDate, animated: animated)
     }
     
     public func setMaxDate(maxDate: Date?, animated: Bool) {
