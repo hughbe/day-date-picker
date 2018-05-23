@@ -32,6 +32,8 @@ public class TimePickerView: UIControl {
     private let MaxMinute = 60
     private let MinHour = 0
     private let MinMinute = 0
+    public var hasHapticFeedback: Bool = true
+    public var hasSound: Bool = true
     
     // MARK: - Table View Property
     fileprivate let hourTableView = UITableView()
@@ -166,6 +168,12 @@ public class TimePickerView: UIControl {
         _textColor = color ?? .black
         
         reload()
+    }
+
+    // MARK: - Set Feedback
+    public func setFeedback(hasHapticFeedback: Bool = true, hasSound: Bool = true) {
+        self.hasHapticFeedback = hasHapticFeedback
+        self.hasSound = hasSound
     }
 }
 
@@ -318,22 +326,24 @@ extension TimePickerView: UITableViewDelegate {
 
     public func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if tableView.isDragging {
-            if #available(iOS 10.0, *) {
+            if #available(iOS 10.0, *), hasHapticFeedback {
                 let selectionFeedbackGenerator = UISelectionFeedbackGenerator()
                 selectionFeedbackGenerator.selectionChanged()
             }
 
-            var urlString: String = ""
-            if tableView == hourTableView {
-                urlString = "System/Library/Audio/UISounds/nano/TimerWheelHoursDetent_Haptic.caf"
-            } else if tableView == minuteTableView {
-                urlString = "System/Library/Audio/UISounds/nano/TimerWheelMinutesDetent_Haptic.caf"
-            }
+            if hasSound {
+                var urlString: String = ""
+                if tableView == hourTableView {
+                    urlString = "System/Library/Audio/UISounds/nano/TimerWheelHoursDetent_Haptic.caf"
+                } else if tableView == minuteTableView {
+                    urlString = "System/Library/Audio/UISounds/nano/TimerWheelMinutesDetent_Haptic.caf"
+                }
 
-            let url = URL(fileURLWithPath: urlString)
-            var soundID: SystemSoundID = 0
-            AudioServicesCreateSystemSoundID(url as CFURL, &soundID)
-            AudioServicesPlaySystemSound(soundID)
+                let url = URL(fileURLWithPath: urlString)
+                var soundID: SystemSoundID = 0
+                AudioServicesCreateSystemSoundID(url as CFURL, &soundID)
+                AudioServicesPlaySystemSound(soundID)
+            }
         }
     }
     

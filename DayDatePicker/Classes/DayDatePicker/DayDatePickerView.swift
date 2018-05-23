@@ -34,6 +34,8 @@ public class DayDatePickerView: UIControl {
     private let MinDay = 0
     private let MinMonth = 0
     private let MinYear = 0
+    public var hasHapticFeedback: Bool = true
+    public var hasSound: Bool = true
     
     // MARK: - Table View Property
     fileprivate let dayTableView = UITableView()
@@ -206,6 +208,12 @@ public class DayDatePickerView: UIControl {
         _textColor = color ?? .black
         
         reload()
+    }
+
+    // MARK: - Set Feedback
+    public func setFeedback(hasHapticFeedback: Bool = true, hasSound: Bool = true) {
+        self.hasHapticFeedback = hasHapticFeedback
+        self.hasSound = hasSound
     }
 }
 
@@ -388,16 +396,18 @@ extension DayDatePickerView: UITableViewDelegate {
 
     public func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if tableView.isDragging {
-            if #available(iOS 10.0, *) {
+            if #available(iOS 10.0, *), hasHapticFeedback {
                 let selectionFeedbackGenerator = UISelectionFeedbackGenerator()
                 selectionFeedbackGenerator.selectionChanged()
             }
-            
-            let urlString = "System/Library/Audio/UISounds/nano/TimerWheelHoursDetent_Haptic.caf"
-            let url = URL(fileURLWithPath: urlString)
-            var soundID: SystemSoundID = 0
-            AudioServicesCreateSystemSoundID(url as CFURL, &soundID)
-            AudioServicesPlaySystemSound(soundID)
+
+            if hasSound {
+                let urlString = "System/Library/Audio/UISounds/nano/TimerStart_Haptic.caf"
+                let url = URL(fileURLWithPath: urlString)
+                var soundID: SystemSoundID = 0
+                AudioServicesCreateSystemSoundID(url as CFURL, &soundID)
+                AudioServicesPlaySystemSound(soundID)
+            }
         }
     }
 
