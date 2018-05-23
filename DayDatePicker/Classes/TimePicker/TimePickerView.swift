@@ -138,6 +138,11 @@ public class TimePickerView: UIControl {
         setMinTime(minTime: minTime, animated: animated)
     }
 
+    public func setMinTime(_ time: Foundation.Date, animated: Bool) {
+        let minTime = Time(date: time)
+        setMinTime(minTime: minTime, animated: true)
+    }
+
     public func setMinTime(minTime: Time?, animated: Bool) {
         _minTime = minTime
         reload()
@@ -151,6 +156,11 @@ public class TimePickerView: UIControl {
     public func setMaxTime(hour: Int, minute: Int, animated: Bool) {
         let maxTime = Time(hour: hour, minute: minute)
         setMaxTime(maxTime: maxTime, animated: animated)
+    }
+
+    public func setMaxTime(_ time: Foundation.Date, animated: Bool) {
+        let maxTime = Time(date: time)
+        setMaxTime(maxTime: maxTime, animated: true)
     }
     
     public func setMaxTime(maxTime: Time?, animated: Bool) {
