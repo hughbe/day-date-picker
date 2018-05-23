@@ -229,6 +229,10 @@ extension DayDatePickerView {
         monthTableView.contentInset = contentInset
         yearTableView.contentInset = contentInset
         
+        dayTableView.separatorStyle = .none
+        monthTableView.separatorStyle = .none
+        yearTableView.separatorStyle = .none
+
         setDate(date: _date, animated: false)
     }
 
@@ -284,7 +288,6 @@ extension DayDatePickerView {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.rowHeight = rowHeight
         tableView.showsVerticalScrollIndicator = false
-        tableView.separatorStyle = .none
         tableView.backgroundColor = UIColor.white
 
         tableView.delegate = self
