@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import AudioToolbox // Sound list: https://github.com/klaas/SwiftySystemSounds
 
 @IBDesignable
 public class TimePickerView: UIControl {
@@ -315,6 +316,27 @@ extension TimePickerView: UITableViewDelegate {
         return rowHeight
     }
 
+    public func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if tableView.isDragging {
+            if #available(iOS 10.0, *) {
+                let selectionFeedbackGenerator = UISelectionFeedbackGenerator()
+                selectionFeedbackGenerator.selectionChanged()
+            }
+
+            var urlString: String = ""
+            if tableView == hourTableView {
+                urlString = "System/Library/Audio/UISounds/nano/TimerWheelHoursDetent_Haptic.caf"
+            } else if tableView == minuteTableView {
+                urlString = "System/Library/Audio/UISounds/nano/TimerWheelMinutesDetent_Haptic.caf"
+            }
+
+            let url = URL(fileURLWithPath: urlString)
+            var soundID: SystemSoundID = 0
+            AudioServicesCreateSystemSoundID(url as CFURL, &soundID)
+            AudioServicesPlaySystemSound(soundID)
+        }
+    }
+    
     public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         guard let tableView = scrollView as? UITableView else {
             return
