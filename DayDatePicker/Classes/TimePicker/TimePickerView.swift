@@ -100,6 +100,11 @@ public class TimePickerView: UIControl {
         setTime(time: time, animated: animated)
     }
 
+    public func setTime(date: Foundation.Date, animated: Bool) {
+        let time = Time(date: date)
+        setTime(time: time, animated: animated)
+    }
+
     public func setTime(time: Time, animated: Bool) {
         var time = time
         if let minTime = _minTime, time < minTime {
@@ -181,6 +186,9 @@ extension TimePickerView {
         hourTableView.contentInset = contentInset
         minuteTableView.contentInset = contentInset
         
+        hourTableView.separatorStyle = .none
+        minuteTableView.separatorStyle = .none
+
         setTime(time: _time, animated: false)
     }
 
@@ -230,7 +238,6 @@ extension TimePickerView {
         tableView.rowHeight = rowHeight
         tableView.estimatedRowHeight = rowHeight
         tableView.showsVerticalScrollIndicator = false
-        tableView.separatorStyle = .none
         tableView.backgroundColor = UIColor.white
         tableView.contentInset = UIEdgeInsets(top: (frame.size.height - rowHeight) / 2, left: 0, bottom: (frame.size.height - rowHeight) / 2, right: 0)
 
