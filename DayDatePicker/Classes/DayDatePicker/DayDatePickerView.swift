@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import AudioToolbox // Sound list: https://github.com/klaas/SwiftySystemSounds
 
 @IBDesignable
 public class DayDatePickerView: UIControl {
@@ -33,6 +34,8 @@ public class DayDatePickerView: UIControl {
     private let MinDay = 0
     private let MinMonth = 0
     private let MinYear = 0
+    public var hasHapticFeedback: Bool = true
+    public var hasSound: Bool = true
     
     // MARK: - Table View Property
     fileprivate let dayTableView = UITableView()
@@ -165,9 +168,9 @@ public class DayDatePickerView: UIControl {
         setMinDate(minDate: minDate, animated: animated)
     }
 
-    public func setMinDate(minDate: Foundation.Date, animated: Bool) {
-        let minDateDate = Date(date: minDate)
-        setMinDate(minDate: minDateDate, animated: animated)
+    public func setMinDate(_ date: Foundation.Date, animated: Bool) {
+        let minDate = Date(date: date)
+        setMinDate(minDate: minDate, animated: animated)
     }
 
     public func setMinDate(minDate: Date?, animated: Bool) {
@@ -185,9 +188,9 @@ public class DayDatePickerView: UIControl {
         setMaxDate(maxDate: maxDate, animated: true)
     }
     
-    public func setMaxDate(maxDate: Foundation.Date, animated: Bool) {
-        let maxDateDate = Date(date: maxDate)
-        setMaxDate(maxDate: maxDateDate, animated: animated)
+    public func setMaxDate(_ date: Foundation.Date, animated: Bool) {
+        let maxDate = Date(date: date)
+        setMaxDate(maxDate: maxDate, animated: animated)
     }
     
     public func setMaxDate(maxDate: Date?, animated: Bool) {
@@ -205,6 +208,12 @@ public class DayDatePickerView: UIControl {
         _textColor = color ?? .black
         
         reload()
+    }
+
+    // MARK: - Set Feedback
+    public func setFeedback(hasHapticFeedback: Bool = true, hasSound: Bool = true) {
+        self.hasHapticFeedback = hasHapticFeedback
+        self.hasSound = hasSound
     }
 }
 
@@ -383,6 +392,23 @@ extension DayDatePickerView: UITableViewDelegate {
         dayTableView.reloadAndLayout()
         monthTableView.reloadAndLayout()
         yearTableView.reloadAndLayout()
+    }
+
+    public func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if tableView.isDragging {
+            if #available(iOS 10.0, *), hasHapticFeedback {
+                let selectionFeedbackGenerator = UISelectionFeedbackGenerator()
+                selectionFeedbackGenerator.selectionChanged()
+            }
+
+            if hasSound {
+                let urlString = "System/Library/Audio/UISounds/nano/TimerStart_Haptic.caf"
+                let url = URL(fileURLWithPath: urlString)
+                var soundID: SystemSoundID = 0
+                AudioServicesCreateSystemSoundID(url as CFURL, &soundID)
+                AudioServicesPlaySystemSound(soundID)
+            }
+        }
     }
 
     public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
