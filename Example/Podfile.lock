@@ -1,5 +1,5 @@
 PODS:
-  - DayDatePicker (1.5)
+  - DayDatePicker (1.7)
   - FBSnapshotTestCase (2.1.4):
     - FBSnapshotTestCase/SwiftSupport (= 2.1.4)
   - FBSnapshotTestCase/Core (2.1.4)
@@ -15,7 +15,7 @@ EXTERNAL SOURCES:
     :path: ../
 
 SPEC CHECKSUMS:
-  DayDatePicker: a1449d5a2a4abace9c0c9c702eb751f66649236b
+  DayDatePicker: e493a82e774ae43ec9b825f1a39c3a6b374a885f
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
 
 PODFILE CHECKSUM: 69fcf032d21f0c566bbf962e2e8c2116500e1eda
