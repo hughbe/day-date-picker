@@ -107,6 +107,17 @@ public class DayDatePickerView: UIControl {
             setTextWith(font: textFont, color: newValue)
         }
     }
+    
+    override public var backgroundColor: UIColor? {
+        didSet {
+            dayTableView.backgroundColor = backgroundColor
+            dayTableView.reloadData()
+            monthTableView.backgroundColor = backgroundColor
+            monthTableView.reloadData()
+            yearTableView.backgroundColor = backgroundColor
+            yearTableView.reloadData()
+        }
+    }
 
     public var showOrdinalIndicator = true {
         didSet {
@@ -297,7 +308,7 @@ extension DayDatePickerView {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.rowHeight = rowHeight
         tableView.showsVerticalScrollIndicator = false
-        tableView.backgroundColor = UIColor.white
+        tableView.backgroundColor = self.backgroundColor
 
         tableView.delegate = self
         tableView.dataSource = self
@@ -337,7 +348,7 @@ extension DayDatePickerView: UITableViewDataSource {
         
         cell.textLabel?.textAlignment = .center
         cell.textLabel?.font = textFont
-        cell.backgroundColor = UIColor.white
+        cell.backgroundColor = self.backgroundColor
         cell.textLabel?.textColor = textColor
         
         if tableView == dayTableView {
