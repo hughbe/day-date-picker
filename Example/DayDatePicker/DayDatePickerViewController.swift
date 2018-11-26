@@ -27,6 +27,7 @@ class DayDatePickerViewController: UIViewController {
         dayDatePickerView.delegate = self
         dayDatePickerView.setMaxDate(Date(), animated: true)
         dayDatePickerView.setFeedback(hasHapticFeedback: false, hasSound: false)
+        dayDatePickerView.backgroundColor = UIColor.lightGray
     }
     
     // MARK: - Actions
