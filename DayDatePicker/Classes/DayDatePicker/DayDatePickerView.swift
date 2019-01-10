@@ -394,6 +394,17 @@ extension DayDatePickerView: UITableViewDelegate {
         yearTableView.reloadAndLayout()
     }
 
+    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if tableView == dayTableView {
+            day = dayRange.lowerBound + indexPath.row
+        } else if tableView == monthTableView {
+            month = monthRange.lowerBound + indexPath.row
+        } else if tableView == yearTableView {
+            year = yearRange.lowerBound + indexPath.row
+        }
+        delegate?.didSelectDate(day: day, month: month, year: year)
+    }
+
     public func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if tableView.isDragging {
             if #available(iOS 10.0, *), hasHapticFeedback {
