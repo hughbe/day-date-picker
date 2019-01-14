@@ -65,7 +65,7 @@ public class DayDatePickerView: UIControl {
     }
     
     // MARK: - Delegate
-    @IBOutlet public var delegate: DayDatePickerViewDelegate?
+    @IBOutlet public weak var delegate: DayDatePickerViewDelegate?
 
     // MARK: - Public Property
     public var minDate: Date? {
