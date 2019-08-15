@@ -5,6 +5,14 @@
 //  Created by Hugh Bellamy on 05/02/2018.
 //
 
+class DayDateIntHelpers {
+    static let ordinalFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .ordinal
+        return formatter
+    }()
+}
+
 internal extension Int {
     func round(toNearest: Int) -> Int{
         let fractionNum = Double(self) / Double(toNearest)
@@ -14,16 +22,12 @@ internal extension Int {
 
     var ordinalIndicatorString: String {
         get {
-            switch self {
-            case 1, 21, 31:
-                return "st"
-            case 2, 22, 32:
-                return "nd"
-            case 3, 23, 33:
-                return "nd"
-            default:
-                return "th"
+            let stringSelf = "\(self)"
+            if let ordinalSelf: String = DayDateIntHelpers.ordinalFormatter.string(from: NSNumber(value: self)) {
+                return ordinalSelf.replacingOccurrences(of: stringSelf, with: "")
             }
+            return ""
         }
     }
 }
+
